@@ -2,8 +2,10 @@ const bing_api_endpoint = "https://api.bing.microsoft.com/v7.0/images/search";
 const bing_api_key = BING_API_KEY
 
 function runSearch() {
-  openResultsPane();
 
+  // TODO: Clear the results pane before you run a new search
+
+  openResultsPane();
 
   // TODO: Build your query by combining the bing_api_endpoint and a query attribute
   //  named 'q' that takes the value from the search bar input field.
@@ -18,6 +20,9 @@ function runSearch() {
   //   - Look for your data in event.target.response
   //   - When adding headers, also include the commented out line below. See the API docs at:
   // https://docs.microsoft.com/en-us/bing/search-apis/bing-image-search/reference/headers
+  //   - When you get your responses, add elements to the DOM in #resultsImageContainer to
+  //     display them to the user
+  //   - HINT: You'll need to ad even listeners to them after you add them to the DOM
   //
   // request.setRequestHeader("Ocp-Apim-Subscription-Key", bing_api_key);
 
