@@ -2,31 +2,47 @@ const bing_api_endpoint = "https://api.bing.microsoft.com/v7.0/images/search";
 const bing_api_key = BING_API_KEY
 
 function runSearch() {
-  let query = document.querySelector(".search .form input").value
-  let queryurl = bing_api_endpoint + "?q=" + encodeURIComponent(query);
+  // TODO: Build your query by combining the bing_api_endpoint and a query attribute
+  //  named 'q' that takes the value from the search bar input field.
 
   let request = new XMLHttpRequest();
-  request.setRequestHeader("Ocp-Apim-Subscription-Key", bing_api_key);
 
   // TODO: Construct the request object and add appropriate event listeners to
-  // handle responses. At a minimum, you'll need to set request headers to
-  // accept JSON responses, and to set the header "Ocp-Apim-Subscription-Key" to
-  // the value in BING_API_KEY. See the API docs at
+  // handle responses. See:
+  // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest_API/Using_XMLHttpRequest
+  //
+  //   - You'll want to specify that you want json as your response type
+  //   - Look for your data in event.target.response
+  //   - When you're ready to display your search results, call openResultsPane() below to open it
+  //   - When adding headers, also include the commented out line below. See the API docs at:
   // https://docs.microsoft.com/en-us/bing/search-apis/bing-image-search/reference/headers
+  //
+  // request.setRequestHeader("Ocp-Apim-Subscription-Key", bing_api_key);
 
-  handleBingResponse();
+  // TODO: Send the request
 
   return false;  // Keep this; it keeps the browser from sending the event
                   // further up the DOM chain. Here, we don't want to trigger
                   // the default form submission behavior.
 }
 
-function handleBingResponse() {
-  window.location.hash = "results";
+function openResultsPane() {
+  // This will make the results pane visible.
+  document.querySelector("#resultsExpander").classList.add("open");
 }
 
-function closeSeachPane() {
-  window.location.hash = "";
+function closeResultsPane() {
+  // This will make the results pane hidden again.
+  document.querySelector("#resultsExpander").classList.remove("open");
 }
 
-document.querySelector("#exitButton").addEventListener("click", closeSeachPane);
+// This will 
+document.querySelector("#runSearchButton").addEventListener("click", runSearch);
+document.querySelector(".search input").addEventListener("keypress", (e) => {
+  if (e.key == "Enter") {runSearch()}
+});
+
+document.querySelector("#closeResultsButton").addEventListener("click", closeResultsPane);
+document.querySelector("body").addEventListener("keydown", (e) => {
+  if(e.key == "Escape") {closeResultsPane()}
+});

@@ -2,7 +2,7 @@
 
 10 points
 
-**DUE: Friday, April 21 by 5:30pm**
+**DUE: Friday, February 2 by 5:00pm**
 
 ### Instructions
 
