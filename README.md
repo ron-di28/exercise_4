@@ -45,6 +45,9 @@ any materials you consulted.
 ### Rubric
 
 - Use `XMLHTTPRequest` to make an AJAX requests to the image search API (3 points)
+    - Include the search term as a url query parameter
+    - Include the correct API authorization header
+    - Retrieve results in a json format
 - Running a search clears previous search results (1 point)
 - Use the DOM API to display image results to the user (2 points)
 - Use the DOM API to display related concept results to the user (1 point)

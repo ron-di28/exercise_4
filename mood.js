@@ -2,6 +2,9 @@ const bing_api_endpoint = "https://api.bing.microsoft.com/v7.0/images/search";
 const bing_api_key = BING_API_KEY
 
 function runSearch() {
+  openResultsPane();
+
+
   // TODO: Build your query by combining the bing_api_endpoint and a query attribute
   //  named 'q' that takes the value from the search bar input field.
 
@@ -13,7 +16,6 @@ function runSearch() {
   //
   //   - You'll want to specify that you want json as your response type
   //   - Look for your data in event.target.response
-  //   - When you're ready to display your search results, call openResultsPane() below to open it
   //   - When adding headers, also include the commented out line below. See the API docs at:
   // https://docs.microsoft.com/en-us/bing/search-apis/bing-image-search/reference/headers
   //
