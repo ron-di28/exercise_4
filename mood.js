@@ -3,39 +3,98 @@ const bing_api_key = BING_API_KEY
 
 function runSearch() {
 
-  // TODO: Clear the results pane before you run a new search
+  let resultsContainer = document.getElementById('resultsImageContainer');
+  resultsContainer.innerHTML = '';
 
-  openResultsPane();
-
-  // TODO: Build your query by combining the bing_api_endpoint and a query attribute
-  //  named 'q' that takes the value from the search bar input field.
-
+  let searchInput = document.querySelector('.search input');
+  let query = searchInput.value;
+  let url = `${bing_api_endpoint}?q=${encodeURIComponent(query)}`;
   let request = new XMLHttpRequest();
 
-  // TODO: Construct the request object and add appropriate event listeners to
-  // handle responses. See:
-  // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest_API/Using_XMLHttpRequest
-  //
-  //   - You'll want to specify that you want json as your response type
-  //   - Look for your data in event.target.response
-  //   - When adding headers, also include the commented out line below. See the API docs at:
-  // https://docs.microsoft.com/en-us/bing/search-apis/bing-image-search/reference/headers
-  //   - When you get your responses, add elements to the DOM in #resultsImageContainer to
-  //     display them to the user
-  //   - HINT: You'll need to ad even listeners to them after you add them to the DOM
-  //
-  // request.setRequestHeader("Ocp-Apim-Subscription-Key", bing_api_key);
+  request.open('GET', url, true);
+  request.responseType = 'json';
+  request.setRequestHeader("Ocp-Apim-Subscription-Key", bing_api_key);
+  request.setRequestHeader("Content-Type", "application/json");
 
-  // TODO: Send the request
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 300) {
+      let data = request.response;
+      displayResults(data);
+    } else {
+      console.error("Error:", request.statusText);
+    }
+  };
+
+  request.send(); 
+  openResultsPane();
+
 
   return false;  // Keep this; it keeps the browser from sending the event
                   // further up the DOM chain. Here, we don't want to trigger
                   // the default form submission behavior.
 }
 
+function displayResults(data) {
+  let resultsContainer = document.getElementById('resultsImageContainer');
+  
+  data.value.forEach(image => {
+    let imgElement = document.createElement('img');
+    imgElement.src = image.contentUrl;
+    imgElement.alt = image.name;
+    
+    imgElement.addEventListener('click', function() {
+      addToMoodBoard(image.contentUrl, image.name);
+    });
+
+    resultsContainer.appendChild(imgElement);
+  });
+
+  displayRelatedSearches(data.relatedSearches);
+}
+
+function addToMoodBoard(imageUrl, imageName) {
+  let board = document.getElementById('board');
+  let imgElement = document.createElement('img');
+  imgElement.src = imageUrl;
+  imgElement.alt = imageName;
+
+  let container = document.createElement('div');
+  container.className = 'savedImage';
+  container.appendChild(imgElement);
+
+  board.appendChild(container);
+}
+
+function displayRelatedSearches(relatedSearches) {
+  if (!relatedSearches) return; 
+
+  let relatedSearchesContainer = document.getElementById('relatedSearchesContainer'); 
+  relatedSearchesContainer.innerHTML = '';
+
+  relatedSearches.forEach(search => {
+    let searchElement = document.createElement('li');
+    searchElement.textContent = search.text;
+
+    searchElement.addEventListener('click', function() {
+      performNewSearch(search.text);
+    });
+
+    relatedSearchesContainer.appendChild(searchElement);
+  });
+}
+
+function performNewSearch(query) {
+  let searchInput = document.querySelector('.search input'); 
+  searchInput.value = query;
+  runSearch();
+}
+
+
+
 function openResultsPane() {
   // This will make the results pane visible.
   document.querySelector("#resultsExpander").classList.add("open");
+
 }
 
 function closeResultsPane() {
